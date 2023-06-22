@@ -19,6 +19,7 @@ from django.urls import path
 from listings import views # import views.py de listings pour pouvoir l'appeler dans les urlspatterns
 
 urlpatterns = [
+    path("", views.hello),
     path("admin/", admin.site.urls),
     path("hello/", views.hello),
     path("about-us/", views.about),
