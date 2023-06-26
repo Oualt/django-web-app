@@ -5,7 +5,9 @@
   {% for band in bands %}
   <li><a href="{{ band.id }}">{{ band.name }}</a></li>
   {% endfor %}
-</p>
+  <br> <br>
+  <a href="{% url 'band-create' %}">Créer un nouveau groupe</a>
+  
 <p>Il y a {{ bands|length }} groupes</p>
 <p>
   J'ai.. {% if bands|length < 5 %} peu de {% elif bands|length < 10 %} quelques
