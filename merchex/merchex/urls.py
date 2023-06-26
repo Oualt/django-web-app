@@ -16,11 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from listings import views # import views.py de listings pour pouvoir l'appeler dans les urlspatterns
+from listings import views # import views.py de l'application listings pour pouvoir l'appeler dans les urlspatterns
+from django.shortcuts import redirect # permet de rediriger vers une autre url
 
 urlpatterns = [
-    path("", views.hello),
+    path("", lambda request: redirect('bands/')), # redirige vers band_list si on ne met rien dans l'url
     path("admin/", admin.site.urls),
-    path("hello/", views.hello),
+    path("bands/", views.band_list, name='band-list'), # correspond a def band_list(request) dans views.py
+    path('bands/<int:id>/', views.band_detail, name='band-detail'), # permet de récupérer l'id du groupe dans l'url
+    path('bands/add/', views.band_create, name='band-create'), # permet de créer un groupe
+    path('bands/<int:id>/change/', views.band_update, name='band-update'), # permet de modifier un groupe
+    path('bands/<int:id>/delete/', views.band_delete, name='band-delete'), # permet de supprimer un groupe
     path("about-us/", views.about),
+    path("contact-us/", views.contact, name='contact'),
+    path("email-envoye/", views.email_envoye, name='email-envoye'),
+    path('listings/add/', views.listing_create, name='listing-create'), # permet de créer une annonce
 ]

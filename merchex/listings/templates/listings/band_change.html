@@ -1,0 +1,15 @@
+# listings/templates/listings/band_change.html
+
+{% extends 'listings/base.html' %}
+
+{% block content %}
+
+ <h1>Modifier le groupe</h1>
+
+<form action="" method="post">
+  {% csrf_token %} {# token de sécurité #}
+   {{ form.as_p }}  {# form.as_p affiche le formulaire en utilisant des balises p  #}
+  <input type="submit" value="Envoyer">
+</form>
+
+{% endblock %}
