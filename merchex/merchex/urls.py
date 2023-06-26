@@ -26,7 +26,7 @@ urlpatterns = [
     path('bands/<int:id>/', views.band_detail, name='band-detail'), # permet de récupérer l'id du groupe dans l'url
     path('bands/add/', views.band_create, name='band-create'), # permet de créer un groupe
     path('bands/<int:id>/change/', views.band_update, name='band-update'), # permet de modifier un groupe
-    path('bands/<int:id>/delete/', views.band_delete, name='band-delete'), # permet de supprimer un groupe
+    path('bands/<int:id>/delete/', views.band_delete, name='band-delete'), # permet de supprimer un groupe, contient un POST pour confirmer la suppression
     path("about-us/", views.about),
     path("contact-us/", views.contact, name='contact'),
     path("email-envoye/", views.email_envoye, name='email-envoye'),

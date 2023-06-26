@@ -8,10 +8,15 @@ from listings.forms import ContactUsForm
 from django.core.mail import send_mail
 from django.shortcuts import redirect
 from listings.forms import BandForm, ListingForm
+from django.contrib import messages
 
 
 def band_list(request):
     bands = Band.objects.all()
+    # si on viens de supprimer un groupe, on affiche un message flash de succès
+    if request.session.get('band_deleted', False): # on vérifie si la variable de session "band_deleted" est à True
+        messages.success(request, 'Le groupe a bien été supprimé')
+        request.session['band_deleted'] = False # on remet la variable de session à False pour ne pas afficher le message à chaque fois
     return render(request, 'listings/band_list.html', context={'bands': bands})
 
 def band_detail(request, id):
@@ -59,7 +64,9 @@ def band_delete(request, id):
     if request.method == 'POST':
         # supprimer le groupe de la base de données
         band.delete()
-        # rediriger vers la liste des groupes avec un message flash
+        # on met une variable de session à True pour afficher un message flash de succès
+        request.session['band_deleted'] = True # on met la variable de session "band_deleted" à True
+        # rediriger vers la liste des groupes
         return redirect('band-list')
 
     # pas besoin de « else » ici. Si c'est une demande GET, continuer simplement
