@@ -1,0 +1,75 @@
+from django.db import models
+
+# Create your models here.
+# classe Generator contenant les attributs de la table Generator
+class Generator(models.Model):
+    # une classe qui permettra de demander la génération d'un labyrinthe avec les attributs suivants :
+    # - un nom de labyrinthe
+    # - un nombre de pièces à générer (ce qui déterminera la taille du labyrinthe)
+    # - un nombre de monstres à générer
+    # - un nombre de trésors à générer
+    # - un booléen indiquant si le labyrinthe doit être généré avec des pièges
+    # - un booléen indiquant si le labyrinthe doit être généré avec des monstres
+    # - un booléen indiquant si le labyrinthe doit être généré avec des trésors
+    # - un booléen indiquant si le labyrinthe doit être généré avec des pièces de départ et d'arrivée
+    # - un booléen indiquant si le labyrinthe doit être généré avec des pièces spéciales
+    # on crée une classe GeneratorType qui hérite de models.TextChoices
+    class GeneratorType(models.TextChoices):
+        AUTOMATIQUE = 'A'
+        MANUELLE = 'M' # On pourra sélectionner les pièces à générer
+
+    # SI AUTOMATIQUE on crée une classe GeneratorSize qui hérite de models.TextChoices
+    class GeneratorSize(models.TextChoices):
+        PETIT = 'P' # 4 à 7 pièces
+        MOYEN = 'M' # 8 à 11 pièces
+        GRAND = 'G' # 12 à 15 pièces
+
+    
+
+
+
+class Room(models.Model):
+    # une classe qui permettra de définir une pièce avec les attributs suivants :
+    # - un nom
+    # - une description
+    # - un nombre de monstres
+    # - un nombre de trésors
+    # - un booléen indiquant si la pièce est la pièce de départ
+    # - un booléen indiquant si la pièce est la pièce d'arrivée
+    
+    # on crée une classe Taille qui donne un choix de taille de pièce sous forme de menu déroulant
+    class Taille(models.TextChoices):
+        PETITE = 'P'
+        MOYENNE = 'M'
+        GRANDE = 'G'
+
+    # on crée une classe Type qui donne un choix de type de pièce sous forme de menu déroulant, par défaut la pièce est une pièce normale (P)
+    class Type(models.TextChoices):
+        NORMALE = 'N'
+        DEPART = 'D'
+        ARRIVEE = 'A'
+    
+    # on crée une classe Contenu qui donne un choix de contenu de pièce sous forme de menu déroulant
+    class Contenu(models.TextChoices):
+        VIDE = 'V'
+        MONSTRE = 'M'
+        TRESOR = 'T'
+        MONSTRE_TRESOR = 'MT'
+        PIEGE = 'P'
+        MONSTRE_PIEGE = 'MP'
+        TRESOR_PIEGE = 'TP'
+        MONSTRE_TRESOR_PIEGE = 'MTP'
+
+    # on définit le nombre de sorties possibles pour une pièce en fonction de sa taille
+    # une pièce de taille petite ne peut avoir qu'une sortie ou aucune
+    # une pièce de taille moyenne peut avoir jusqu'à deux sorties
+    # une pièce de taille grande peut avoir jusqu'à trois sorties
+    # on crée une classe Sortie qui donne un choix de nombre de sorties possibles pour une pièce sous forme de menu déroulant
+    class Sortie(models.TextChoices):
+        UNE = '1'
+        DEUX = '2'
+        TROIS = '3'
+        QUATRE = '4'
+
+
+   

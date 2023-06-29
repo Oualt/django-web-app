@@ -1,0 +1,71 @@
+from django.shortcuts import render
+
+# Create your views here.
+# on importe le modele Generator
+from .models import Generator
+from django.http import HttpResponse
+from django.shortcuts import render
+from generator.forms import GeneratorForm
+from django.contrib import messages
+from django.shortcuts import redirect
+
+def generator_list(request):
+    generators = Generator.objects.all()
+    # si on viens de supprimer un groupe, on affiche un message flash de succès
+    if request.session.get('generator_deleted', False): # on vérifie si la variable de session "band_deleted" est à True
+        messages.success(request, 'Le groupe a bien été supprimé')
+        request.session['generator_deleted'] = False # on remet la variable de session à False pour ne pas afficher le message à chaque fois
+    return render(request, 'listings/generator_list.html', context={'generators': generators})
+
+def generator_detail(request, id):
+    generator = Generator.objects.get(id=id) # obtenir l'objet Band qui a l'id passé en paramètre
+    return render(request, 'listings/generator_detail.html', {'generator': generator}) # on passe l'objet Band à la vue
+
+def generator_create(request):
+    if request.method == 'POST':
+        form = GeneratorForm(request.POST) # créer un formulaire GeneratorForm avec les données POST
+        if form.is_valid():
+            # créer une nouvelle « Generator » et la sauvegarder dans la db
+            generator = form.save()
+            # redirige vers la page de détail du groupe que nous venons de créer
+            # nous pouvons fournir les arguments du motif url comme arguments à la fonction de redirection
+            return redirect('generator-detail', generator.id)
+
+    else:
+        form = GeneratorForm()
+
+    return render(request,
+            'listings/generator_create.html',
+            {'form': form})
+
+def generator_update(request, id):
+    generator = Generator.objects.get(id=id)
+    if request.method == 'POST':
+        form = GeneratorForm(request.POST, instance=generator) # créer et remplir le formulaire avec les données de l'instance Generator
+        if form.is_valid():
+            # créer une nouvelle « Generator » et la sauvegarder dans la db
+            form.save()
+            # redirige vers la page de détail du groupe que nous venons de créer
+            # nous pouvons fournir les arguments du motif url comme arguments à la fonction de redirection
+            return redirect('generator-detail', generator.id)
+
+    else:
+        form = GeneratorForm(instance=generator)
+
+    return render(request,
+            'listings/generator_change.html',
+            {'form': form})
+
+def generator_delete(request, id):
+    generator = Generator.objects.get(id=id)
+    if request.method == 'POST':
+        generator.delete()
+        request.session['generator_deleted'] = True # on met la variable de session "band_deleted" à True pour afficher le message flash
+        return redirect('generator-list')
+
+    return render(request,
+            'listings/generator_delete.html',
+            {'generator': generator})
+
+def generator(request):
+    
